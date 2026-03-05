@@ -1,30 +1,52 @@
 ﻿#include <iostream>
-#include <iomanip> // 👈 新增標頭檔：為了使用 setprecision 與 fixed
+#include <iomanip>
 
 using namespace std;
 
-int main()
-{
-    cout << "Hello World!\n";
-    cout << "This is a C++ application.\n\n";
+int main() {
+    // 為了方便調整，我們先設定好兩個欄位的寬度
+    const int nameWidth = 20;
+    const int priceWidth = 12;
+    const int totalWidth = nameWidth + priceWidth;
 
-    // --- 1. 常數宣告示範 ---
-    const double PI = 3.14159; // 宣告一個不可被修改的常數
+    // --- 1. 印出頂部標題列 ---
+    // 利用 setfill 填滿等號
+    cout << setfill('=') << setw(11) << ""
+        << " 購物收據範例 "
+        << setw(11) << "" << endl;
 
-    // --- 2. 變數宣告與初始化 ---
-    int a = 5;
-    double b(99.9876);         // 故意給一個多位小數，方便展示 setprecision
-    auto str{ "Hello" };
+    // --- 2. 印出欄位名稱 ---
+    // 記得把 setfill 改回填滿空白，以免整個版面都是等號
+    cout << setfill(' ');
+    cout << left << setw(nameWidth) << "品項名稱"
+        << right << setw(priceWidth) << "單價" << endl;
 
-    // --- 3. 輸出結果與格式控制 ---
-    cout << "The value of a is: " << a << "，a的變數大小為 " << sizeof(a) << " bytes\n";
+    // --- 3. 印出減號分隔線 ---
+    cout << setfill('-') << setw(totalWidth) << "" << endl;
+    cout << setfill(' '); // 再次改回空白
 
-    // 加上 fixed 與 setprecision(2)，強制小數點後顯示兩位並四捨五入
+    // --- 4. 印出商品清單 (固定兩位小數) ---
+    // 設定為 fixed (固定小數點) 並保留 2 位
     cout << fixed << setprecision(2);
-    cout << "The value of b is: " << b << " (經過格式化)\n";
 
-    cout << "The value of str is: " << str << "，str的變數大小為 " << sizeof(str) << " bytes\n";
-    cout << "The constant PI is: " << PI << " (套用先前的設定，顯示兩位小數)\n";
+    cout << left << setw(nameWidth) << "蘋果"
+        << right << setw(priceWidth) << 50.00 << endl;
+
+    cout << left << setw(nameWidth) << "香蕉"
+        << right << setw(priceWidth) << 12.35 << endl;
+
+    cout << left << setw(nameWidth) << "火龍果(特價)"
+        << right << setw(priceWidth) << 1234.50 << endl;
+
+    // --- 5. 印出底部等號分隔線 ---
+    cout << setfill('=') << setw(totalWidth) << "" << endl;
+
+    // --- 6. 總計 (切換為科學記號) ---
+    double total = 50.00 + 12.35 + 1234.50; // 總計為 1296.85
+
+    cout << setfill(' '); // 恢復空白
+    // 使用 scientific 切換為科學記號，搭配 setprecision(2) 會自動四捨五入變成 1.30e+03
+    cout << "總計(科學記號表示): " << scientific << setprecision(2) << total << endl;
 
     return 0;
 }
