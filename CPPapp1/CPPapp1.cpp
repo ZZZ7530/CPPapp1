@@ -1,84 +1,57 @@
-﻿#include <iostream>
-#include <iomanip>  // 必須引入此標頭檔
+﻿#include <vector>
+#include <iostream>
 #include <string>
 
 using namespace std;
 
 int main() {
-	//C++ string function demo
-	//字串的初始方式
-	string str0(10, '*');
-	cout << "str0 = " << str0 << endl;
+    int choice;
+    int totalCount = 0; // 改回顯式型別 int
 
+    vector<string> orderList;
 
-	string str1 = "Hello";
-	auto str2 = "World";
-	string str3 = str1 + " " + str2 + "!";
-	string str3a = "\"Hello \\ World!\"";
-	auto str3b = R"("Hello \ world!")";
+    cout << "===== 歡迎來到 C++ 點餐系統 =====" << endl;
 
+    while (true) {
+        cout << "\n選單: 1.珍珠奶茶 2.綠茶 3.結束點餐" << endl;
+        cout << "請輸入選擇: ";
+        if (!(cin >> choice)) break; // 增加防呆
 
-	cout << "str1:" << str1 << endl;
-	cout << "str2:" << str2 << endl;
-	cout << "str3:" << str3 << endl;
-	cout << "str3a:" << str3a << endl;
-	cout << "str3b:" << str3b << endl;
+        if (choice == 3) break;
 
+        switch (choice) {
+        case 1:
+            orderList.push_back("珍珠奶茶");
+            totalCount++;
+            break;
+        case 2:
+            orderList.push_back("綠茶");
+            totalCount++;
+            break;
+        default:
+            cout << "無效選擇，請重新輸入。" << endl;
+            continue;
+        }
+    }
 
-	cout << "str3 capacity = " << str3.capacity() << endl;
-	cout << "str3 length(size) = " << str3.length() << endl;
-	cout << "str3 max_size = " << str3.max_size() << endl;
-	cout << "str3 size =" << str3.size() << endl;
-	cout << "str3 empty = " << str3.empty() << endl;
-	cout << "str3[0] = " << str3[0] << endl;
-	cout << "str3.at(0) = " << str3.at(0) << endl;
-	cout << "str3.at(4) = " << str3.at(4) << endl;
-	cout << "str3.front() = " << str3.front() << endl;
-	cout << "str3.back() = " << str3.back() << endl;
-	cout << "str3.substr(0, 5) = " << str3.substr(0, 5) << endl;
-	cout << "str3.substr(7, 3) = " << str3.substr(7, 3) << endl;
+    cout << "\n--- 訂單彙整 ---" << endl;
+    if (orderList.empty()) {
+        cout << "您沒有點任何東西。" << endl;
+    }
+    else {
+        // 修改：使用傳統 for 迴圈
+        for (size_t i = 0; i < orderList.size(); i++) {
+            cout << "- " << orderList[i] << endl;
+        }
 
+        string discountMsg = (totalCount >= 5) ? "符合折扣資格！" : "未達折扣門檻。";
+        cout << "\n總數: " << totalCount << " 杯，" << discountMsg << endl;
+    }
 
-	string str4;
-	str4.append(str1);
-	cout << "str4 = " << str4 << endl;
-	str4.append(" ");
-	str4 += str2;
-	cout << "str4 = " << str4 << endl;
-	str4.push_back('!');
-	cout << "str4 = " << str4 << endl;
+    for (int i = 0; i < 3; i++) {
+        cout << "謝謝惠顧! ";
+    }
+    cout << endl;
 
-
-	cout << "str4.find(str1) = " << str4.find(str1) << endl;
-	cout << "str4.find(\"World\", 3) = " << str4.find("World", 3) << endl;
-	cout << "str4.find(\"World\", 7) = " << str4.find("World", 7) << endl;
-
-	str4.insert(5, " C++");
-	cout << "str4 = " << str4 << endl;
-	str4.erase(str4.begin() + 6, str4.end() - 6);
-	cout << "str4 = " << str4 << endl;
-	str4.clear();
-	cout << "str4 = " << str4 << endl;
-
-
-	// C++ string conversion to number demo
-	string str5 = "1234567890";
-	int number1 = stoi(str5);
-	cout << "number1 = " << number1 << endl;
-
-
-	string str6 = "123.4567890";
-	double number2 = stod(str6);
-	cout << "number2 = " << number2 << endl;
-
-
-	// C++ number conversion to string demo
-	string str7 = to_string(number1);
-	cout << "str7 = " << str7 << endl;
-
-
-	string str8 = to_string(number2);
-	cout << "str8 = " << str8 << endl;
-
-	return 0; // 建議加上回傳值
+    return 0;
 }
