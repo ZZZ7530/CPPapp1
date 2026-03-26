@@ -1,68 +1,86 @@
 ﻿#include <iostream>
-using namespace std;
 
+class Complex {
+private:
+    double real; // 實部
+    double imag; // 虛部
 
-string convert(int score) {
-	string grade;
-	if (score >= 90) {
-		grade = "A";
-	}
-	else if (score >= 80) {
-		grade = "B";
-	}
-	else if (score >= 70) {
-		grade = "C";
-	}
-	else if (score >= 60) {
-		grade = "D";
-	}
-	else {
-		grade = "E";
-	}
+public:
+    // 建構子 (Constructor)
+    Complex(double r = 0.0, double i = 0.0) : real(r), imag(i) {}
 
+    // 多載加法運算子 (+)
+    // (a + bi) + (c + di) = (a + c) + (b + d)i
+    Complex operator+(const Complex& other) const {
+        return Complex(real + other.real, imag + other.imag);
+    }
 
-	//使用switch case改寫以上範例
-	//switch (score / 10) {
-	//	case 10:
-	//	case 9:
-	//		grade = "A";
-	//		break;
-	//	case 8:
-	//		grade = "B";
+    // 多載減法運算子 (-)
+    // (a + bi) - (c + di) = (a - c) + (b - d)i
+    Complex operator-(const Complex& other) const {
+        return Complex(real - other.real, imag - other.imag);
+    }
 
+    // 多載乘法運算子 (*)
+    // (a + bi) * (c + di) = (ac - bd) + (ad + bc)i
+    Complex operator*(const Complex& other) const {
+        return Complex(real * other.real - imag * other.imag,
+                       real * other.imag + imag * other.real);
+    }
 
-	//		break;
-	//	case 7:
-	//		grade = "C";
-	//		break;
-	//	case 6:
-	//		grade = "D";
-	//		break;
-	//	default:
-	//		grade = "E";
-	//		break;
-	//}
-	//trinary operator
-	// (condition) ? true : false;
-	//grade = (score >= 90) ? "A" : (score >= 80) ? "B" : (score >= 70) ? "C" : (score >= 60) ? "D" : "E";
-	return grade;
+    // 多載除法運算子 (/)
+    // (a + bi) / (c + di) = [(ac + bd) / (c^2 + d^2)] + [(bc - ad) / (c^2 + d^2)]i
+    Complex operator/(const Complex& other) const {
+        double denominator = other.real * other.real + other.imag * other.imag;
+        
+        // 簡單的除以零防護
+        if (denominator == 0) {
+            std::cerr << "\n錯誤：除數不能為零！" << std::endl;
+            return Complex(0, 0); 
+        }
+        
+        double result_real = (real * other.real + imag * other.imag) / denominator;
+        double result_imag = (imag * other.real - real * other.imag) / denominator;
+        
+        return Complex(result_real, result_imag);
+    }
+
+    // 多載輸出串流運算子 (<<)，方便直接用 cout 印出複數
+    friend std::ostream& operator<<(std::ostream& os, const Complex& c) {
+        os << c.real;
+        if (c.imag >= 0) {
+            os << " + " << c.imag << "i";
+        } else {
+            os << " - " << -c.imag << "i";
+        }
+        return os;
+    }
+};
+
+int main() {
+    // 建立兩個複數物件
+    Complex c1(4.0, 3.0); // 4 + 3i
+    Complex c2(2.0, 1.0); // 2 + 1i
+
+    std::cout << "複數 c1 = " << c1 << std::endl;
+    std::cout << "複數 c2 = " << c2 << std::endl;
+    std::cout << "----------------------" << std::endl;
+
+    // 測試加法
+    Complex sum = c1 + c2;
+    std::cout << "加法 (c1 + c2) = " << sum << std::endl;
+
+    // 測試減法
+    Complex diff = c1 - c2;
+    std::cout << "減法 (c1 - c2) = " << diff << std::endl;
+
+    // 測試乘法
+    Complex prod = c1 * c2;
+    std::cout << "乘法 (c1 * c2) = " << prod << std::endl;
+
+    // 測試除法
+    Complex quot = c1 / c2;
+    std::cout << "除法 (c1 / c2) = " << quot << std::endl;
+
+    return 0;
 }
-
-int main()
-{
-	// 給定一個分數，輸出對應的等第
-	int score = 0;
-
-
-	cout << "請輸入一個分數: ";
-	cin >> score;
-	string grade = convert(score);
-
-
-	cout << "分數為: " << score << endl;
-	cout << "等第為: " << grade << endl;
-	string isPass;
-	isPass = (score >= 60) ? "及格" : "不及格";
-	cout << "是否及格: " << isPass << endl;
-}
-
